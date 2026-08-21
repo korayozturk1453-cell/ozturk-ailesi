@@ -1,0 +1,6 @@
+{
+  "name": "Öztürk Ailesi",
+  "description": "Öztürk Ailesi özel ve güvenli anı defteri; fotoğraf albümü, kişiselleştirilebilir başlıklar ve aile içi izin yönetimli hatıra günlüğü.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
