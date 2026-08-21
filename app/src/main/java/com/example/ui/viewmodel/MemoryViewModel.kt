@@ -70,6 +70,9 @@ class MemoryViewModel(application: Application) : AndroidViewModel(application) 
     private val _isBucketListOpen = MutableStateFlow(false)
     val isBucketListOpen: StateFlow<Boolean> = _isBucketListOpen.asStateFlow()
 
+    private val _isSyncOpen = MutableStateFlow(false)
+    val isSyncOpen: StateFlow<Boolean> = _isSyncOpen.asStateFlow()
+
     private val _isGridMode = MutableStateFlow(false)
     val isGridMode: StateFlow<Boolean> = _isGridMode.asStateFlow()
 
@@ -399,6 +402,14 @@ class MemoryViewModel(application: Application) : AndroidViewModel(application) 
         _isBucketListOpen.value = false
     }
 
+    fun openSync() {
+        _isSyncOpen.value = true
+    }
+
+    fun closeSync() {
+        _isSyncOpen.value = false
+    }
+
     fun toggleMilestone(milestone: com.example.data.model.ChildMilestone) {
         viewModelScope.launch {
             val updated = milestone.copy(
@@ -469,6 +480,52 @@ class MemoryViewModel(application: Application) : AndroidViewModel(application) 
     fun deleteBucketItem(item: com.example.data.model.FamilyBucketItem) {
         viewModelScope.launch {
             repository.deleteBucketItem(item)
+        }
+    }
+
+    // Family Sync & Backup operations
+    fun exportAndShareBackup(context: android.content.Context) {
+        viewModelScope.launch {
+            val mems = repository.allMemoriesList()
+            val miles = repository.allMilestonesList()
+            val buckets = repository.allBucketItemsList()
+            val json = com.example.util.FamilySyncHelper.exportBackupToJson(
+                memories = mems,
+                milestones = miles,
+                bucketItems = buckets,
+                appTitle = appTitle.value,
+                appSubtitle = appSubtitle.value,
+                categories = categories.value
+            )
+            com.example.util.FamilySyncHelper.shareBackupFile(context, json)
+        }
+    }
+
+    fun importBackup(jsonString: String, onComplete: (Boolean, Int) -> Unit) {
+        viewModelScope.launch {
+            try {
+                val data = com.example.util.FamilySyncHelper.parseBackupJson(jsonString)
+                // Update titles and categories
+                if (data.appTitle.isNotBlank()) securityManager.setAppTitle(data.appTitle)
+                if (data.appSubtitle.isNotBlank()) securityManager.setAppSubtitle(data.appSubtitle)
+                data.categories.forEach { securityManager.addCategory(it) }
+
+                // Insert memories
+                var count = 0
+                data.memories.forEach { mem ->
+                    repository.insertMemory(mem)
+                    count++
+                }
+                data.milestones.forEach { m ->
+                    repository.insertMilestone(m)
+                }
+                data.bucketItems.forEach { b ->
+                    repository.insertBucketItem(b)
+                }
+                onComplete(true, count)
+            } catch (e: Exception) {
+                onComplete(false, 0)
+            }
         }
     }
 }

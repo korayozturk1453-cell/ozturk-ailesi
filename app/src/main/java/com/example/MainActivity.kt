@@ -15,6 +15,7 @@ import com.example.ui.screens.AddEditMemoryScreen
 import com.example.ui.screens.AdventureMapDialog
 import com.example.ui.screens.ChildGrowthDialog
 import com.example.ui.screens.FamilyBucketListDialog
+import com.example.ui.screens.FamilySyncDialog
 import com.example.ui.screens.HomeScreen
 import com.example.ui.screens.InsightsDialog
 import com.example.ui.screens.LockScreen
@@ -62,6 +63,7 @@ fun MemoryApp(viewModel: MemoryViewModel = viewModel(), isDarkMode: Boolean = fa
   val isSlideshowOpen by viewModel.isSlideshowOpen.collectAsStateWithLifecycle()
   val isChildGrowthOpen by viewModel.isChildGrowthOpen.collectAsStateWithLifecycle()
   val isBucketListOpen by viewModel.isBucketListOpen.collectAsStateWithLifecycle()
+  val isSyncOpen by viewModel.isSyncOpen.collectAsStateWithLifecycle()
   val allMilestones by viewModel.allMilestones.collectAsStateWithLifecycle()
   val allBucketItems by viewModel.allBucketItems.collectAsStateWithLifecycle()
   val appTitle by viewModel.appTitle.collectAsStateWithLifecycle()
@@ -151,11 +153,19 @@ fun MemoryApp(viewModel: MemoryViewModel = viewModel(), isDarkMode: Boolean = fa
       onOpenAdventureMap = { viewModel.openAdventureMap() },
       onOpenSlideshow = { viewModel.openSlideshow() },
       onOpenChildGrowth = { viewModel.openChildGrowth() },
-      onOpenBucketList = { viewModel.openBucketList() }
+      onOpenBucketList = { viewModel.openBucketList() },
+      onOpenSync = { viewModel.openSync() }
     )
   }
 
   // Dialogs
+  if (isSyncOpen) {
+    FamilySyncDialog(
+      viewModel = viewModel,
+      onDismiss = { viewModel.closeSync() }
+    )
+  }
+
   if (isSettingsOpen) {
     SecuritySettingsDialog(
       securityManager = viewModel.securityManager,

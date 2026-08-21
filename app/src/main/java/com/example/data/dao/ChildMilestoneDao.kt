@@ -15,6 +15,9 @@ interface ChildMilestoneDao {
     @Query("SELECT * FROM child_milestones ORDER BY timestamp DESC")
     fun getAllMilestones(): Flow<List<ChildMilestone>>
 
+    @Query("SELECT * FROM child_milestones ORDER BY timestamp DESC")
+    suspend fun getAllMilestonesList(): List<ChildMilestone>
+
     @Query("SELECT * FROM child_milestones WHERE childName = :childName ORDER BY timestamp DESC")
     fun getMilestonesForChild(childName: String): Flow<List<ChildMilestone>>
 

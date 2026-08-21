@@ -151,7 +151,8 @@ fun HomeScreen(
     onOpenAdventureMap: () -> Unit = {},
     onOpenSlideshow: () -> Unit = {},
     onOpenChildGrowth: () -> Unit = {},
-    onOpenBucketList: () -> Unit = {}
+    onOpenBucketList: () -> Unit = {},
+    onOpenSync: () -> Unit = {}
 ) {
     var isSearchExpanded by remember { mutableStateOf(false) }
 
@@ -615,6 +616,34 @@ fun HomeScreen(
                                 fontSize = 12.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = IndigoOnContainer
+                            )
+                        }
+                    }
+
+                    // Eşinle Paylaş & Senkronize Et
+                    Surface(
+                        onClick = onOpenSync,
+                        shape = RoundedCornerShape(12.dp),
+                        color = AmberContainer.copy(alpha = 0.95f),
+                        border = androidx.compose.foundation.BorderStroke(1.2.dp, AmberPrimary),
+                        modifier = Modifier.testTag("btn_quick_sync")
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 7.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Sync,
+                                contentDescription = null,
+                                tint = AmberPrimary,
+                                modifier = Modifier.size(16.dp)
+                            )
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text(
+                                text = "📲 Eşinle Paylaş",
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = AmberOnContainer
                             )
                         }
                     }

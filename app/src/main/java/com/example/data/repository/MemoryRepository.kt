@@ -37,6 +37,18 @@ class MemoryRepository(
         return memoryDao.getMemoryById(id)
     }
 
+    suspend fun allMemoriesList(): List<MemoryEntry> {
+        return memoryDao.getAllMemoriesList()
+    }
+
+    suspend fun allMilestonesList(): List<ChildMilestone> {
+        return childMilestoneDao.getAllMilestonesList()
+    }
+
+    suspend fun allBucketItemsList(): List<FamilyBucketItem> {
+        return familyBucketItemDao.getAllBucketItemsList()
+    }
+
     suspend fun insertMemory(memory: MemoryEntry): Long {
         return memoryDao.insertMemory(memory)
     }

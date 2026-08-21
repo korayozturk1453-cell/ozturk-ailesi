@@ -15,6 +15,9 @@ interface FamilyBucketItemDao {
     @Query("SELECT * FROM family_bucket_items ORDER BY isCompleted ASC, id ASC")
     fun getAllBucketItems(): Flow<List<FamilyBucketItem>>
 
+    @Query("SELECT * FROM family_bucket_items ORDER BY isCompleted ASC, id ASC")
+    suspend fun getAllBucketItemsList(): List<FamilyBucketItem>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertBucketItem(item: FamilyBucketItem): Long
 

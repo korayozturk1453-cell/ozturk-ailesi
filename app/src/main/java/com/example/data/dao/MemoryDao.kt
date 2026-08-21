@@ -14,6 +14,9 @@ interface MemoryDao {
     @Query("SELECT * FROM memories ORDER BY timestamp DESC")
     fun getAllMemories(): Flow<List<MemoryEntry>>
 
+    @Query("SELECT * FROM memories ORDER BY timestamp DESC")
+    suspend fun getAllMemoriesList(): List<MemoryEntry>
+
     @Query("SELECT * FROM memories WHERE isFavorite = 1 ORDER BY timestamp DESC")
     fun getFavoriteMemories(): Flow<List<MemoryEntry>>
 
