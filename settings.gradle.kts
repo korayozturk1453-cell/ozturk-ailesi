@@ -22,4 +22,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Öztürk Ailesi"
 
-include(":uygulama")
+include(":app")
